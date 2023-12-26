@@ -1,16 +1,23 @@
+/*
+ * @Author: WGF
+ * @Date: 2023-12-26 10:26:36
+ * @LastEditors: WGF
+ * @LastEditTime: 2023-12-26 15:09:56
+ * @Description:
+ * @FilePath: /react-lowcode-simple/src/pages/EditPages/Center/Canvas/index.tsx
+ */
 import useEditStore, {
   addCmp,
-  clearCanvas,
   fetchCanvas,
   initCanvas,
 } from "src/store/editStore";
 import styles from "./index.module.less";
 import Cmp from "../Cmp";
-import {useEffect} from "react";
-import {useCanvasId} from "src/store/hooks";
+import { useEffect } from "react";
+import { useCanvasId } from "src/store/hooks";
 import EditBox from "../EditBox";
 import useZoomStore from "src/store/zoomStore";
-import {ICmpWithKey} from "src/store/editStoreTypes";
+import { ICmpWithKey } from "src/store/editStoreTypes";
 import ReferenceLines from "../ReferenceLines";
 
 export default function Canvas() {
@@ -19,7 +26,7 @@ export default function Canvas() {
     state.canvas,
     state.assembly,
   ]);
-  const {cmps, style} = canvas.content;
+  const { cmps, style } = canvas.content;
 
   const id = useCanvasId();
   useEffect(() => {
@@ -34,7 +41,10 @@ export default function Canvas() {
     };
   }, []);
 
+  // 当组件被拖动到页面放下时
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log(e);
+
     const canvasDomPos = {
       top: 114 + 1,
       left:
@@ -64,9 +74,11 @@ export default function Canvas() {
     addCmp(dragCmp);
   };
 
+  // 当组件被拖动到页面上时
   const allowDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
+
   console.log("canvas render", cmps); //sy-log
 
   return (
@@ -79,14 +91,16 @@ export default function Canvas() {
         transform: `scale(${zoom / 100})`,
       }}
       onDrop={onDrop}
-      onDragOver={allowDrop}>
+      onDragOver={allowDrop}
+    >
       <EditBox />
       {cmps.map((item, index) => (
         <Cmp
           key={item.key}
           cmp={item}
           index={index}
-          isSelected={assembly.has(index)}></Cmp>
+          isSelected={assembly.has(index)}
+        ></Cmp>
       ))}
 
       <ReferenceLines canvasStyle={style} />

@@ -1,3 +1,11 @@
+/*
+ * @Author: WGF
+ * @Date: 2023-12-26 10:26:36
+ * @LastEditors: WGF
+ * @LastEditTime: 2023-12-26 15:25:14
+ * @Description: 
+ * @FilePath: /react-lowcode-simple/src/pages/EditPages/Center/Cmp/index.tsx
+ */
 import {ICmpWithKey} from "src/store/editStoreTypes";
 import styles from "./index.module.less";
 import {Button, Img, Input, Text} from "./CmpDetail";
@@ -26,7 +34,9 @@ const Cmp = memo((props: ICmpProps) => {
   const {cmp, index, isSelected} = props;
   const {style} = cmp;
 
-  const setSelected = (e) => {
+  const setSelected = (e: any) => {
+    console.log('e.metaKey',e.metaKey);
+    
     e.stopPropagation();
     if (e.metaKey) {
       setCmpsSelected([index]);

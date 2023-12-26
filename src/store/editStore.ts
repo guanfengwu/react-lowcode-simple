@@ -8,6 +8,7 @@ import type {
   IEditStore,
   ICmpWithKey,
   IContent,
+  ICanvas,
 } from "./editStoreTypes";
 import { computeBoxStyle, getOnlyKey, isCmpInView } from "src/utils";
 import Axios from "src/request/axios";
@@ -20,24 +21,17 @@ import {
   isFormComponent,
   isGroupComponent,
 } from "src/utils/const";
-import { ICmp } from "./editStoreTypes";
 
 const showDiff = 12;
 const adjustDiff = 3;
 
 const useEditStore = create(
   immer<EditStoreState & EditStoreAction>(() => ({
-    canvas: {
-      id: null,
-      title: "未命名",
-      type: "content",
-      content: getDefaultCanvasContent(),
-    },
-
-    hasSavedCanvas: true, // 画布编辑后是否被保存
+    canvas: getDefaultCanvas(),
+    // 画布编辑后是否被保存
+    hasSavedCanvas: true,
     // 记录选中组件的下标
     assembly: new Set(),
-
     // 历史
     canvasChangeHistory: [
       {
@@ -51,30 +45,22 @@ const useEditStore = create(
       },
     ],
     canvasChangeHistoryIndex: 0,
+    addCmp: () => undefined,
   }))
 );
 
 // 初始化
 export const initCanvas = () => {
   useEditStore.setState((draft) => {
-    draft.canvas = {
-      id: null,
-      title: "未命名",
-      type: "content",
-      content: getDefaultCanvasContent(),
-    };
-    draft.hasSavedCanvas = true; // 画布编辑后是否被保存
+    draft.canvas = getDefaultCanvas();
+    // 画布编辑后是否被保存
+    draft.hasSavedCanvas = true;
     // 记录选中组件的下标
     draft.assembly = new Set();
     // 历史
     draft.canvasChangeHistory = [
       {
-        canvas: {
-          id: null,
-          title: "未命名",
-          type: "content",
-          content: getDefaultCanvasContent(),
-        },
+        canvas: getDefaultCanvas(),
         assembly: new Set(),
       },
     ];
@@ -84,6 +70,9 @@ export const initCanvas = () => {
   resetZoom();
 };
 
+/**
+ * 清除画布内容
+ */
 export const clearCanvas = () => {
   useEditStore.setState((draft) => {
     draft.canvas.content = getDefaultCanvasContent();
@@ -108,8 +97,16 @@ function getStoreFormKey(store: EditStoreState, cmp: ICmpWithKey) {
 
   return formKey;
 }
+
+/**
+ * 添加组件
+ * @param _cmp
+ * @returns
+ */
 export const addCmp = (_cmp: any) => {
   if (_cmp.type & isGroupComponent) {
+    console.log("isGroupComponent", isGroupComponent);
+
     addGroup(_cmp);
     return;
   }
@@ -162,11 +159,18 @@ export function addGroup(group: any) {
 
     draft.canvas.content.cmps = draft.canvas.content.cmps.concat(groups);
     draft.hasSavedCanvas = false;
+    console.log("draft.canvas.content.cmps", draft.canvas.content.cmps);
+
     draft.assembly = new Set([draft.canvas.content.cmps.length - 1]);
     recordCanvasChangeHistory(draft);
   });
 }
 
+/**
+ * 复制组件
+ * @param cmp
+ * @returns
+ */
 function getCopyCmp(cmp: ICmpWithKey) {
   const newCmp = cloneDeep(cmp);
   newCmp.key = getOnlyKey();
@@ -217,6 +221,7 @@ export const addAssemblyCmps = () => {
 // 如果选中的是组合子组件，则除了删除这个组件之外，还要更新父组合组件的 groupCmpKeys
 export const delSelectedCmps = () => {
   useEditStore.setState((draft) => {
+    // eslint-disable-next-line prefer-const
     let { cmps, formKeys } = draft.canvas.content;
     const map = getCmpsMap(cmps);
     // newAssembly 会存储待删除的子组件、父组件、普通组件的下标等
@@ -456,7 +461,7 @@ export const getCmpGroupIndex = (childIndex: number): undefined | number => {
 // ! 修改组件属性
 // 根据改变的量来修改
 export const updateAssemblyCmpsByDistance = (
-  newStyle: Style,
+  newStyle: any,
   autoAdjustment?: boolean
 ) => {
   useEditStore.setState((draft) => {
@@ -477,12 +482,12 @@ export const updateAssemblyCmpsByDistance = (
     });
 
     newAssembly.forEach((index) => {
-      const selectedCmp = { ...cmps[index] };
+      const selectedCmp: any = { ...cmps[index] };
       let invalid = false;
       for (const key in newStyle) {
         if (
           (key === "width" || key === "height") &&
-          selectedCmp.style[key] + newStyle[key] < 2
+          (selectedCmp.style[key] as number) + (newStyle[key] as number) < 2
         ) {
           invalid = true;
           break;
@@ -1078,7 +1083,7 @@ export const groupCmps = () => {
       key: getOnlyKey(),
       type: isGroupComponent,
       style: {
-        defaultComponentStyle_0,
+        ...defaultComponentStyle_0,
         top,
         left,
         width,
@@ -1177,9 +1182,13 @@ export function getCmpsMap(cmps: Array<ICmpWithKey>) {
   return map;
 }
 
+/**
+ * 画布页面初始样式
+ * @returns
+ */
 function getDefaultCanvasContent(): IContent {
   return {
-    // 页面样式
+    // 画布样式
     style: {
       width: 320,
       height: 568,
@@ -1191,5 +1200,15 @@ function getDefaultCanvasContent(): IContent {
     },
     // 组件
     cmps: [],
+  };
+}
+
+function getDefaultCanvas(): ICanvas {
+  return {
+    id: null,
+    title: "自定义卡片",
+    type: "content",
+    content: getDefaultCanvasContent(),
+    data: {},
   };
 }

@@ -12,14 +12,14 @@ import useEditStore, {
 } from "src/store/editStore";
 import Zoom from "./Zoom";
 import useZoomStore from "src/store/zoomStore";
-import {updateAssemblyCmpsByDistance} from "src/store/editStore";
+import { updateAssemblyCmpsByDistance } from "src/store/editStore";
 
 export default function Center() {
   const canvasStyle = useEditStore(canvasStyleSelector);
   const { zoom, zoomIn, zoomOut } = useZoomStore();
-  const keyDown = e => {
+  const keyDown = (e: any) => {
     // 注意之前写的选中鼠标事件：CMD+A会影响输入框的文本选中，因此需要再Center中注意一下选中对象~
-    if((e.target as Element).nodeName==='TEXTAREA'){
+    if ((e.target as Element).nodeName === "TEXTAREA") {
       return;
     }
 
@@ -72,25 +72,25 @@ export default function Center() {
       // 左移
       case "ArrowLeft":
         e.preventDefault();
-        updateAssemblyCmpsByDistance({left: -1});
+        updateAssemblyCmpsByDistance({ left: -1 });
         return;
 
       // 右移
       case "ArrowRight":
         e.preventDefault();
-        updateAssemblyCmpsByDistance({left: 1});
+        updateAssemblyCmpsByDistance({ left: 1 });
         return;
 
       // 上移
       case "ArrowUp":
         e.preventDefault();
-        updateAssemblyCmpsByDistance({top: -1});
+        updateAssemblyCmpsByDistance({ top: -1 });
         return;
 
       // 下移
       case "ArrowDown":
         e.preventDefault();
-        updateAssemblyCmpsByDistance({top: 1});
+        updateAssemblyCmpsByDistance({ top: 1 });
         return;
     }
   };

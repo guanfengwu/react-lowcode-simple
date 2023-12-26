@@ -1,6 +1,14 @@
-import React from 'react'
+/*
+ * @Author: WGF
+ * @Date: 2023-12-26 10:26:37
+ * @LastEditors: WGF
+ * @LastEditTime: 2023-12-26 17:10:45
+ * @Description:
+ * @FilePath: /react-lowcode-simple/src/store/editStoreTypes.ts
+ */
+import React from "react";
 
-export type Style=React.CSSProperties;
+export type Style = React.CSSProperties ;
 
 export interface ICmp {
   type: number;
@@ -32,6 +40,7 @@ export interface ICanvas {
   title: string;
   type: "content" | "template"; // 页面还是模板页
   content: IContent;
+  data: Record<string, any>;
 }
 
 export interface IContent {
@@ -48,15 +57,17 @@ type ISubmit = {
 };
 
 export type EditStoreState = {
-  canvas:ICanvas;
-  hasSavedCanvas: boolean; // 画布编辑后是否被保存
-  assembly:Set<number>;
+  canvas: ICanvas;
+  // 画布编辑后是否被保存
+  hasSavedCanvas: boolean;
+  // 记录选中组件的下标
+  assembly: Set<number>;
   // 记录历史
-  canvasChangeHistory: Array<{canvas: ICanvas; assembly: Set<number>}>;
+  canvasChangeHistory: Array<{ canvas: ICanvas; assembly: Set<number> }>;
   canvasChangeHistoryIndex: number;
-}
+};
 
-export type AddCmpFC =(_cmp:ICmp)=>void;
+export type AddCmpFC = (_cmp: ICmp) => void;
 
 export type EditStoreAction = {
   addCmp: AddCmpFC;

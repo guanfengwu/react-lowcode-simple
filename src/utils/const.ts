@@ -1,3 +1,5 @@
+import { Style } from "src/store/editStoreTypes";
+
 // 组件类型
 export const isTextComponent = 0b00000001; // 1
 export const isImgComponent = 0b00000010; // 2
@@ -9,7 +11,7 @@ export const isFormComponent_Input = 0b10000000; //128
 export const isFormComponent_Button = 0b01000000; // 64
 export const isFormComponent = isFormComponent_Input | isFormComponent_Button;
 
-export const defaultComponentStyle_0 = {
+export const defaultComponentStyle_0: Style = {
   position: "absolute",
   top: 0,
   left: 0,
