@@ -6,11 +6,11 @@ import useEditStore, {
   updateSelectedCmpStyle,
 } from "src/store/editStore";
 import styles from "./index.module.less";
-import {throttle} from "lodash";
+import { throttle } from "lodash";
 import useZoomStore from "src/store/zoomStore";
 import StretchDots from "./StretchDots";
-import {isGroupComponent, isTextComponent} from "src/utils/const";
-import {useEffect, useState} from "react";
+import { isGroupComponent, isTextComponent } from "src/utils/const";
+import { useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import Menu from "../Menu";
 import AlignLines from "./AlignLines";
@@ -24,7 +24,7 @@ export default function EditBox() {
     state.assembly,
   ]);
 
-  const {cmps, style: canvasStyle} = canvas.content;
+  const { cmps, style: canvasStyle } = canvas.content;
   const selectedIndex = Array.from(assembly)[0];
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function EditBox() {
       disY = disY * (100 / zoom);
 
       // 拖拽，允许自动调整
-      updateAssemblyCmpsByDistance({top: disY, left: disX}, true);
+      updateAssemblyCmpsByDistance({ top: disY, left: disX }, true);
 
       startX = x;
       startY = y;
@@ -97,7 +97,7 @@ export default function EditBox() {
         if (cmp.groupKey !== selectedCmp.key) {
           continue;
         }
-        const {top, left, width, height} = cmps[i].style;
+        const { top, left, width, height } = cmps[i].style;
 
         const right = left + width,
           bottom = top + height;
@@ -133,8 +133,8 @@ export default function EditBox() {
     );
   }
 
-  let {width, height} = selectedCmp.style;
-  const {top, left} = selectedCmp.style;
+  let { width, height } = selectedCmp.style;
+  const { top, left } = selectedCmp.style;
 
   const transform = `rotate(${
     size === 1 ? selectedCmp.style.transform : 0
@@ -168,7 +168,8 @@ export default function EditBox() {
         onMouseLeave={() => {
           setTextareaFocused(false);
           setShowMenu(false);
-        }}>
+        }}
+      >
         {selectedCmp.type === isTextComponent && textareaFocused && (
           <TextareaAutosize
             value={selectedCmp.value}
@@ -183,7 +184,7 @@ export default function EditBox() {
               updateSelectedCmpAttr("value", newValue);
             }}
             onHeightChange={(height) => {
-              updateSelectedCmpStyle({height});
+              updateSelectedCmpStyle({ height });
             }}
           />
         )}
@@ -203,7 +204,7 @@ export default function EditBox() {
           />
         )}
 
-        <StretchDots zoom={zoom} style={{width, height}} />
+        <StretchDots zoom={zoom} style={{ width, height }} />
         {selectedCmp.type !== isGroupComponent && (
           <Rotate zoom={zoom} selectedCmp={selectedCmp} />
         )}

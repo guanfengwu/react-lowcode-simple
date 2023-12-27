@@ -2,23 +2,22 @@
  * @Author: WGF
  * @Date: 2023-12-26 10:26:37
  * @LastEditors: WGF
- * @LastEditTime: 2023-12-26 16:39:45
- * @Description: 
+ * @LastEditTime: 2023-12-27 15:38:07
+ * @Description:
  * @FilePath: /react-lowcode-simple/src/pages/EditPages/RightSider/index.tsx
  */
-import {useState} from "react";
+import { useState } from "react";
 import useEditStore from "src/store/editStore";
 import EditCmp from "./EditCmp";
 import EditCanvas from "./EditCanvas";
 import EditMultiCmps from "./EditMultiCmps";
 import styles from "./index.module.less";
-import {isGroupComponent} from "src/utils/const";
+import { isGroupComponent } from "src/utils/const";
 
 // 画布
 // 单个组件
 // 多个组件
 export default function RightSider() {
-  const [showEdit, setShowEdit] = useState(true);
 
   const [canvas, assembly] = useEditStore((state) => [
     state.canvas,
@@ -35,25 +34,16 @@ export default function RightSider() {
 
   return (
     <div className={styles.main}>
-      <div
-        className={styles.switch}
-        onClick={() => {
-          setShowEdit(!showEdit);
-        }}>
-        {showEdit ? "隐藏编辑区域" : "显示编辑区域"}
-      </div>
-
-      {showEdit &&
-        (assemblySize === 0 ? (
-          <EditCanvas canvas={canvas} />
-        ) : assemblySize === 1 && !isGroup ? (
-          <EditCmp
-            selectedCmp={selectedCmp!}
-            formKeys={canvas.content.formKeys}
-          />
-        ) : (
-          <EditMultiCmps isGroup={isGroup} />
-        ))}
+      {assemblySize === 0 ? (
+        <EditCanvas canvas={canvas} />
+      ) : assemblySize === 1 && !isGroup ? (
+        <EditCmp
+          selectedCmp={selectedCmp!}
+          formKeys={canvas.content.formKeys}
+        />
+      ) : (
+        <EditMultiCmps isGroup={isGroup} />
+      )}
     </div>
   );
 }

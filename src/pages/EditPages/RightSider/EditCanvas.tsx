@@ -17,85 +17,87 @@ export default function EditCanvas({ canvas }: { canvas: ICanvas }) {
   return (
     <div className={styles.main}>
       <div className={styles.title}>画布属性</div>
-      <Item label="标题: ">
-        <input
-          type="text"
-          className={styles.itemRight}
-          value={canvas.title}
-          onChange={(e) => {
-            const newValue = e.target.value;
-            updateCanvasTitle(newValue);
-          }}
-        />
-      </Item>
+      <div className={styles.content}>
+        <Item label="标题: ">
+          <input
+            type="text"
+            className={styles.itemRight}
+            value={canvas.title}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              updateCanvasTitle(newValue);
+            }}
+          />
+        </Item>
 
-      <Item label="画布宽度 (px): ">
-        <input
-          type="number"
-          className={styles.itemRight}
-          value={style.width}
-          onChange={(e) => {
-            handleStyleChange(e, {
-              name: "width",
-              value: parseInt(e.target.value) - 0,
-            });
-          }}
-        />
-      </Item>
+        <Item label="画布宽度 (px): ">
+          <input
+            type="number"
+            className={styles.itemRight}
+            value={style.width}
+            onChange={(e) => {
+              handleStyleChange(e, {
+                name: "width",
+                value: parseInt(e.target.value) - 0,
+              });
+            }}
+          />
+        </Item>
 
-      <Item label="画布高度 (px): ">
-        <input
-          type="number"
-          className={styles.itemRight}
-          value={style.height}
-          onChange={(e) => {
-            handleStyleChange(e, {
-              name: "height",
-              value: parseInt(e.target.value) - 0,
-            });
-          }}
-        />
-      </Item>
+        <Item label="画布高度 (px): ">
+          <input
+            type="number"
+            className={styles.itemRight}
+            value={style.height}
+            onChange={(e) => {
+              handleStyleChange(e, {
+                name: "height",
+                value: parseInt(e.target.value) - 0,
+              });
+            }}
+          />
+        </Item>
 
-      <Item label="背景颜色: ">
-        <InputColor
-          className={styles.itemRight}
-          color={style.backgroundColor}
-          onChangeComplete={(e: any) => {
-            handleStyleChange(e, {
-              name: "backgroundColor",
-              value: `rgba(${Object.values(e.rgb).join(",")})`,
-            });
-          }}
-        />
-      </Item>
+        <Item label="背景颜色: ">
+          <InputColor
+            className={styles.itemRight}
+            color={style.backgroundColor}
+            onChangeComplete={(e: any) => {
+              handleStyleChange(e, {
+                name: "backgroundColor",
+                value: `rgba(${Object.values(e.rgb).join(",")})`,
+              });
+            }}
+          />
+        </Item>
 
-      <Item label="背景图片: ">
-        <input
-          type="text"
-          className={styles.itemRight}
-          value={style.backgroundImage}
-          onChange={(e) => {
-            handleStyleChange(e, {
-              name: "backgroundImage",
-              value: e.target.value,
-            });
-          }}
-        />
-      </Item>
-      <Item label="圆角: ">
-        <input
-          type="number"
-          className={styles.itemRight}
-          value={style.borderRadius}
-          onChange={(e) => {
-            handleStyleChange(e, {
-              name: "borderRadius",
-              value: parseInt(e.target.value) - 0,
-            });
-          }}
-        />
-      </Item>
+        <Item label="背景图片: ">
+          <input
+            type="text"
+            className={styles.itemRight}
+            value={style.backgroundImage}
+            onChange={(e) => {
+              handleStyleChange(e, {
+                name: "backgroundImage",
+                value: e.target.value,
+              });
+            }}
+          />
+        </Item>
+        <Item label="圆角: ">
+          <input
+            type="number"
+            className={styles.itemRight}
+            value={style.borderRadius}
+            onChange={(e) => {
+              handleStyleChange(e, {
+                name: "borderRadius",
+                value: parseInt(e.target.value) - 0,
+              });
+            }}
+          />
+        </Item>
+      </div>
     </div>
   );
 }
